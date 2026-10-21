@@ -1,0 +1,522 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PlanWise AI — GenAI Event Planning Assistant</title>
+  <meta name="description" content="PlanWise AI is a GenAI-powered planning assistant that helps you organize weddings, birthdays and community events with budgets, timelines, vendor checklists and personalized ideas.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.5.2/css/all.min.css">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <!-- ============ TOP BAR ============ -->
+  <header class="topbar">
+    <a href="#" class="brand" id="brand-link" aria-label="PlanWise AI home">
+      <span class="brand-mark"><i class="fa-solid fa-wand-magic-sparkles"></i></span>
+      <span class="brand-text">PlanWise <em>AI</em></span>
+    </a>
+    <nav class="topnav" aria-label="Primary">
+      <button class="nav-btn" id="nav-new" type="button"><i class="fa-solid fa-plus"></i><span>New plan</span></button>
+      <button class="nav-btn" id="nav-plans" type="button"><i class="fa-regular fa-folder-open"></i><span>My plans</span><span class="count-badge" id="plans-count" hidden>0</span></button>
+      <button class="nav-btn provider-pill" id="nav-settings" type="button" title="AI settings">
+        <span class="dot" id="provider-dot"></span><span id="provider-label">AI: not configured</span>
+      </button>
+    </nav>
+  </header>
+
+  <main id="main">
+
+    <!-- ============ LANDING ============ -->
+    <section id="landing" class="view">
+      <div class="hero">
+        <div class="hero-copy">
+          <p class="eyebrow"><i class="fa-solid fa-sparkles"></i> Generative AI event planner</p>
+          <h1>Plan unforgettable events — <span class="grad">in minutes, not months.</span></h1>
+          <p class="lede">Tell PlanWise about your wedding, birthday or community event. Generative AI builds a complete plan: a realistic budget, a dated timeline, a vendor checklist and personalized ideas — then stays with you as a chat assistant.</p>
+          <div class="hero-actions">
+            <button class="btn btn-primary btn-lg" id="hero-start" type="button"><i class="fa-solid fa-wand-magic-sparkles"></i> Start planning</button>
+            <button class="btn btn-ghost btn-lg" id="hero-demo" type="button"><i class="fa-solid fa-bolt"></i> Try a sample event</button>
+          </div>
+          <p class="hero-note"><i class="fa-solid fa-lock"></i> Bring your own AI key (Gemini, OpenAI, Groq…) — keys stay in your browser. No key? The built-in Smart Planner still generates a complete plan.</p>
+        </div>
+        <div class="hero-cards" aria-label="Choose an event type">
+          <button class="type-card" data-type="wedding" type="button">
+            <span class="type-icon wedding"><i class="fa-solid fa-ring"></i></span>
+            <strong>Wedding</strong>
+            <span>Ceremony, reception, vendors, attire &amp; more</span>
+          </button>
+          <button class="type-card" data-type="birthday" type="button">
+            <span class="type-icon birthday"><i class="fa-solid fa-cake-candles"></i></span>
+            <strong>Birthday</strong>
+            <span>Kids' parties to milestone celebrations</span>
+          </button>
+          <button class="type-card" data-type="community" type="button">
+            <span class="type-icon community"><i class="fa-solid fa-people-group"></i></span>
+            <strong>Community event</strong>
+            <span>Fundraisers, festivals, meetups, fairs</span>
+          </button>
+        </div>
+      </div>
+
+      <div class="features">
+        <article class="feature">
+          <i class="fa-solid fa-coins"></i>
+          <h3>Smart budgets</h3>
+          <p>AI allocates your budget across categories with per-guest guidance and a contingency buffer, visualized in a live chart.</p>
+        </article>
+        <article class="feature">
+          <i class="fa-regular fa-calendar-check"></i>
+          <h3>Dated timelines</h3>
+          <p>Milestones are computed backward from your event date with checkable tasks and progress tracking.</p>
+        </article>
+        <article class="feature">
+          <i class="fa-solid fa-clipboard-list"></i>
+          <h3>Vendor checklists</h3>
+          <p>Prioritized vendors with cost estimates and the exact questions to ask before you sign anything.</p>
+        </article>
+        <article class="feature">
+          <i class="fa-solid fa-lightbulb"></i>
+          <h3>Personalized ideas</h3>
+          <p>Themes, décor, menus, activities and favors tailored to your vibe — regenerate any category on demand.</p>
+        </article>
+        <article class="feature">
+          <i class="fa-solid fa-comments"></i>
+          <h3>AI assistant chat</h3>
+          <p>Ask anything about your plan: draft invitations, vendor emails, toasts or a rain-plan — with full plan context.</p>
+        </article>
+        <article class="feature">
+          <i class="fa-solid fa-file-export"></i>
+          <h3>Save &amp; export</h3>
+          <p>Plans are saved in your browser. Export as JSON or Markdown, or print a clean PDF-ready document.</p>
+        </article>
+      </div>
+
+      <div class="how">
+        <h2>How it works</h2>
+        <ol class="steps">
+          <li><span>1</span><strong>Describe your event</strong><p>Type, date, guest count, budget, location and your style.</p></li>
+          <li><span>2</span><strong>Generate with AI</strong><p>PlanWise produces a structured, editable plan in seconds.</p></li>
+          <li><span>3</span><strong>Refine &amp; execute</strong><p>Tick off tasks, rebalance the budget, chat for fresh ideas.</p></li>
+        </ol>
+      </div>
+    </section>
+
+    <!-- ============ WIZARD ============ -->
+    <section id="wizard" class="view" hidden>
+      <div class="wizard-shell">
+        <header class="wizard-head">
+          <h2>Tell us about your event</h2>
+          <ol class="stepper" aria-label="Progress">
+            <li class="active" data-step="1"><span>1</span>Basics</li>
+            <li data-step="2"><span>2</span>Style &amp; needs</li>
+            <li data-step="3"><span>3</span>Review</li>
+          </ol>
+        </header>
+
+        <form id="brief-form" novalidate>
+          <!-- Step 1 -->
+          <fieldset class="wstep" data-step="1">
+            <legend class="sr-only">Basics</legend>
+            <div class="field">
+              <label>Event type</label>
+              <div class="seg" role="radiogroup" aria-label="Event type">
+                <label class="seg-opt"><input type="radio" name="type" value="wedding" checked><span><i class="fa-solid fa-ring"></i> Wedding</span></label>
+                <label class="seg-opt"><input type="radio" name="type" value="birthday"><span><i class="fa-solid fa-cake-candles"></i> Birthday</span></label>
+                <label class="seg-opt"><input type="radio" name="type" value="community"><span><i class="fa-solid fa-people-group"></i> Community</span></label>
+                <label class="seg-opt"><input type="radio" name="type" value="other"><span><i class="fa-solid fa-champagne-glasses"></i> Other</span></label>
+              </div>
+            </div>
+            <div class="grid2">
+              <div class="field">
+                <label for="f-name">Event name</label>
+                <input id="f-name" name="name" type="text" placeholder="e.g. Maya &amp; Arjun's Wedding" required>
+              </div>
+              <div class="field">
+                <label for="f-honoree" id="honoree-label">Who is it for?</label>
+                <input id="f-honoree" name="honoree" type="text" placeholder="Couple, birthday person, cause…">
+              </div>
+              <div class="field">
+                <label for="f-date">Event date</label>
+                <input id="f-date" name="date" type="date" required>
+              </div>
+              <div class="field">
+                <label for="f-guests">Expected guests</label>
+                <input id="f-guests" name="guests" type="number" min="1" max="100000" placeholder="120" required>
+              </div>
+              <div class="field">
+                <label for="f-location">City / venue area</label>
+                <input id="f-location" name="location" type="text" placeholder="e.g. Austin, Texas" required>
+              </div>
+              <div class="field">
+                <label for="f-budget">Total budget</label>
+                <div class="input-group">
+                  <select id="f-currency" name="currency" aria-label="Currency">
+                    <option value="USD">USD $</option>
+                    <option value="EUR">EUR €</option>
+                    <option value="GBP">GBP £</option>
+                    <option value="INR">INR ₹</option>
+                    <option value="AUD">AUD A$</option>
+                    <option value="CAD">CAD C$</option>
+                    <option value="SGD">SGD S$</option>
+                    <option value="AED">AED</option>
+                    <option value="JPY">JPY ¥</option>
+                  </select>
+                  <input id="f-budget" name="budget" type="number" min="0" step="100" placeholder="25000" required>
+                </div>
+              </div>
+            </div>
+          </fieldset>
+
+          <!-- Step 2 -->
+          <fieldset class="wstep" data-step="2" hidden>
+            <legend class="sr-only">Style and needs</legend>
+            <div class="field">
+              <label>Vibe &amp; style <small>(pick any)</small></label>
+              <div class="chips" id="vibe-chips">
+                <label class="chip"><input type="checkbox" name="vibe" value="Elegant"><span>Elegant</span></label>
+                <label class="chip"><input type="checkbox" name="vibe" value="Rustic"><span>Rustic</span></label>
+                <label class="chip"><input type="checkbox" name="vibe" value="Modern"><span>Modern</span></label>
+                <label class="chip"><input type="checkbox" name="vibe" value="Bohemian"><span>Bohemian</span></label>
+                <label class="chip"><input type="checkbox" name="vibe" value="Vintage"><span>Vintage</span></label>
+                <label class="chip"><input type="checkbox" name="vibe" value="Glamorous"><span>Glamorous</span></label>
+                <label class="chip"><input type="checkbox" name="vibe" value="Minimalist"><span>Minimalist</span></label>
+                <label class="chip"><input type="checkbox" name="vibe" value="Tropical"><span>Tropical</span></label>
+                <label class="chip"><input type="checkbox" name="vibe" value="Playful"><span>Playful</span></label>
+                <label class="chip"><input type="checkbox" name="vibe" value="Eco-friendly"><span>Eco-friendly</span></label>
+                <label class="chip"><input type="checkbox" name="vibe" value="Traditional"><span>Traditional / Cultural</span></label>
+                <label class="chip"><input type="checkbox" name="vibe" value="Cozy"><span>Cozy &amp; intimate</span></label>
+              </div>
+            </div>
+            <div class="grid2">
+              <div class="field">
+                <label for="f-setting">Setting</label>
+                <select id="f-setting" name="setting">
+                  <option value="Indoor">Indoor</option>
+                  <option value="Outdoor">Outdoor</option>
+                  <option value="Indoor + outdoor">Indoor + outdoor</option>
+                  <option value="Virtual / hybrid">Virtual / hybrid</option>
+                </select>
+              </div>
+              <div class="field">
+                <label for="f-time">Time of day</label>
+                <select id="f-time" name="timeOfDay">
+                  <option>Morning / brunch</option>
+                  <option>Afternoon</option>
+                  <option selected>Evening</option>
+                  <option>All day</option>
+                </select>
+              </div>
+            </div>
+            <div class="field">
+              <label for="f-musthaves">Must-haves</label>
+              <textarea id="f-musthaves" name="mustHaves" rows="2" placeholder="e.g. live band, photo booth, kids' corner, sign-language interpreter"></textarea>
+            </div>
+            <div class="field">
+              <label for="f-dietary">Food &amp; dietary notes</label>
+              <input id="f-dietary" name="dietary" type="text" placeholder="e.g. vegetarian-friendly, halal, nut allergies, open bar">
+            </div>
+            <div class="field">
+              <label for="f-notes">Anything else the AI should know?</label>
+              <textarea id="f-notes" name="notes" rows="3" placeholder="Story, constraints, cultural traditions, accessibility needs, sponsors…"></textarea>
+            </div>
+          </fieldset>
+
+          <!-- Step 3 -->
+          <fieldset class="wstep" data-step="3" hidden>
+            <legend class="sr-only">Review</legend>
+            <div class="review" id="review-box"></div>
+            <div class="ai-status" id="ai-status"></div>
+          </fieldset>
+
+          <footer class="wizard-foot">
+            <button type="button" class="btn btn-ghost" id="w-back"><i class="fa-solid fa-arrow-left"></i> Back</button>
+            <div class="spacer"></div>
+            <button type="button" class="btn btn-primary" id="w-next">Next <i class="fa-solid fa-arrow-right"></i></button>
+            <button type="submit" class="btn btn-primary btn-generate" id="w-generate" hidden><i class="fa-solid fa-wand-magic-sparkles"></i> Generate my plan</button>
+          </footer>
+        </form>
+      </div>
+    </section>
+
+    <!-- ============ LOADING ============ -->
+    <section id="loading" class="view" hidden aria-live="polite">
+      <div class="loader">
+        <div class="orb"><i class="fa-solid fa-wand-magic-sparkles"></i></div>
+        <h2 id="loading-title">Generating your plan…</h2>
+        <p id="loading-msg">Analyzing your brief</p>
+        <small id="loading-provider"></small>
+      </div>
+    </section>
+
+    <!-- ============ DASHBOARD ============ -->
+    <section id="dashboard" class="view" hidden>
+      <header class="plan-head">
+        <div class="plan-title">
+          <span class="plan-type-badge" id="plan-type-badge">Wedding</span>
+          <h2 id="plan-title">Plan title</h2>
+          <p id="plan-tagline" class="tagline"></p>
+          <ul class="meta" id="plan-meta"></ul>
+          <p class="source-note" id="plan-source"></p>
+        </div>
+        <div class="plan-actions">
+          <button class="btn btn-primary" id="act-refine" type="button"><i class="fa-solid fa-wand-sparkles"></i> Refine with AI</button>
+          <button class="btn btn-ghost" id="act-save" type="button"><i class="fa-regular fa-floppy-disk"></i> Save</button>
+          <div class="menu">
+            <button class="btn btn-ghost" id="act-export" type="button" aria-haspopup="true"><i class="fa-solid fa-file-export"></i> Export</button>
+            <div class="menu-list" id="export-menu" hidden>
+              <button type="button" data-export="print"><i class="fa-solid fa-print"></i> Print / PDF</button>
+              <button type="button" data-export="markdown"><i class="fa-brands fa-markdown"></i> Copy as Markdown</button>
+              <button type="button" data-export="json"><i class="fa-solid fa-code"></i> Download JSON</button>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      <nav class="tabs" role="tablist" aria-label="Plan sections">
+        <button role="tab" class="tab active" data-tab="overview" aria-selected="true"><i class="fa-solid fa-compass"></i> Overview</button>
+        <button role="tab" class="tab" data-tab="budget"><i class="fa-solid fa-coins"></i> Budget</button>
+        <button role="tab" class="tab" data-tab="timeline"><i class="fa-regular fa-calendar-check"></i> Timeline</button>
+        <button role="tab" class="tab" data-tab="vendors"><i class="fa-solid fa-clipboard-list"></i> Vendors</button>
+        <button role="tab" class="tab" data-tab="ideas"><i class="fa-solid fa-lightbulb"></i> Ideas</button>
+      </nav>
+
+      <!-- Overview -->
+      <div class="tabpanel active" id="tab-overview" role="tabpanel">
+        <div class="overview-grid">
+          <article class="card span2">
+            <h3><i class="fa-solid fa-align-left"></i> Plan summary</h3>
+            <p id="ov-summary"></p>
+          </article>
+          <article class="card stat">
+            <h3><i class="fa-solid fa-coins"></i> Budget</h3>
+            <div class="stat-big" id="ov-budget"></div>
+            <div class="progress"><div id="ov-budget-bar"></div></div>
+            <small id="ov-budget-note"></small>
+          </article>
+          <article class="card stat">
+            <h3><i class="fa-solid fa-hourglass-half"></i> Countdown</h3>
+            <div class="stat-big" id="ov-countdown"></div>
+            <small id="ov-date"></small>
+          </article>
+          <article class="card stat">
+            <h3><i class="fa-regular fa-square-check"></i> Task progress</h3>
+            <div class="stat-big" id="ov-tasks"></div>
+            <div class="progress"><div id="ov-tasks-bar"></div></div>
+            <small id="ov-tasks-note"></small>
+          </article>
+          <article class="card stat">
+            <h3><i class="fa-solid fa-handshake"></i> Vendors booked</h3>
+            <div class="stat-big" id="ov-vendors"></div>
+            <div class="progress"><div id="ov-vendors-bar"></div></div>
+            <small id="ov-vendors-note"></small>
+          </article>
+          <article class="card span2">
+            <h3><i class="fa-solid fa-flag-checkered"></i> Up next</h3>
+            <ul class="plain-list" id="ov-next"></ul>
+          </article>
+          <article class="card span2">
+            <h3><i class="fa-solid fa-star"></i> Pro tips</h3>
+            <ul class="plain-list" id="ov-tips"></ul>
+          </article>
+          <article class="card span2">
+            <h3><i class="fa-solid fa-triangle-exclamation"></i> Risks &amp; mitigations</h3>
+            <ul class="risk-list" id="ov-risks"></ul>
+          </article>
+        </div>
+      </div>
+
+      <!-- Budget -->
+      <div class="tabpanel" id="tab-budget" role="tabpanel" hidden>
+        <div class="budget-grid">
+          <article class="card">
+            <h3><i class="fa-solid fa-chart-pie"></i> Allocation</h3>
+            <div class="chart-wrap"><canvas id="budget-chart" aria-label="Budget allocation chart" role="img"></canvas></div>
+            <div class="budget-totals">
+              <div><span>Allocated</span><strong id="b-allocated"></strong></div>
+              <div><span>Target</span><strong id="b-target"></strong></div>
+              <div><span>Difference</span><strong id="b-diff"></strong></div>
+            </div>
+          </article>
+          <article class="card">
+            <div class="card-head">
+              <h3><i class="fa-solid fa-table-list"></i> Line items <small>(edit amounts inline)</small></h3>
+              <button class="btn btn-sm btn-ghost" id="b-add" type="button"><i class="fa-solid fa-plus"></i> Add line</button>
+            </div>
+            <div class="table-wrap">
+              <table class="budget-table" id="budget-table">
+                <thead><tr><th>Category</th><th>Amount</th><th>%</th><th>Notes</th><th></th></tr></thead>
+                <tbody></tbody>
+              </table>
+            </div>
+            <p class="hint"><i class="fa-solid fa-circle-info"></i> Tip: use <strong>Refine with AI</strong> to rebalance (e.g. “cut décor by 20% and add a videographer”).</p>
+          </article>
+        </div>
+      </div>
+
+      <!-- Timeline -->
+      <div class="tabpanel" id="tab-timeline" role="tabpanel" hidden>
+        <div class="panel-head">
+          <p class="hint"><i class="fa-solid fa-circle-info"></i> Milestones are dated backward from your event. Tick tasks as you complete them — progress is saved with the plan.</p>
+          <button class="btn btn-sm btn-ghost" id="t-reset" type="button"><i class="fa-solid fa-rotate-left"></i> Reset ticks</button>
+        </div>
+        <ol class="timeline" id="timeline-list"></ol>
+      </div>
+
+      <!-- Vendors -->
+      <div class="tabpanel" id="tab-vendors" role="tabpanel" hidden>
+        <div class="panel-head">
+          <p class="hint"><i class="fa-solid fa-circle-info"></i> Mark vendors as booked, and expand each card for questions to ask before signing.</p>
+          <div class="filter-row">
+            <label class="sr-only" for="v-filter">Filter</label>
+            <select id="v-filter"><option value="all">All vendors</option><option value="open">Not booked</option><option value="booked">Booked</option><option value="high">High priority</option></select>
+          </div>
+        </div>
+        <div class="vendor-grid" id="vendor-grid"></div>
+      </div>
+
+      <!-- Ideas -->
+      <div class="tabpanel" id="tab-ideas" role="tabpanel" hidden>
+        <div class="panel-head">
+          <p class="hint"><i class="fa-solid fa-circle-info"></i> Personalized to your vibe. Hit <em>Regenerate</em> on any category to ask the AI for fresh ideas.</p>
+        </div>
+        <div class="ideas-grid" id="ideas-grid"></div>
+      </div>
+    </section>
+
+    <!-- ============ SAVED PLANS ============ -->
+    <section id="plans" class="view" hidden>
+      <header class="section-head">
+        <h2>My plans</h2>
+        <p>Plans are stored locally in this browser.</p>
+      </header>
+      <div class="plans-grid" id="plans-grid"></div>
+      <div class="empty" id="plans-empty" hidden>
+        <i class="fa-regular fa-folder-open"></i>
+        <p>No saved plans yet.</p>
+        <button class="btn btn-primary" id="plans-new" type="button"><i class="fa-solid fa-plus"></i> Create your first plan</button>
+      </div>
+    </section>
+  </main>
+
+  <!-- ============ AI ASSISTANT DRAWER ============ -->
+  <button class="fab" id="chat-fab" type="button" hidden aria-label="Open AI assistant"><i class="fa-solid fa-comments"></i><span>Ask AI</span></button>
+  <aside class="drawer" id="chat-drawer" aria-label="AI assistant" hidden>
+    <header class="drawer-head">
+      <div>
+        <h3><i class="fa-solid fa-wand-magic-sparkles"></i> PlanWise Assistant</h3>
+        <small id="chat-provider"></small>
+      </div>
+      <button class="icon-btn" id="chat-close" type="button" aria-label="Close assistant"><i class="fa-solid fa-xmark"></i></button>
+    </header>
+    <div class="quick-prompts" id="quick-prompts">
+      <button type="button" data-prompt="Draft an invitation message for this event in a warm, friendly tone.">✉️ Draft invitation</button>
+      <button type="button" data-prompt="Write a short email I can send to shortlist a venue, including the key questions I should ask.">🏛️ Venue email</button>
+      <button type="button" data-prompt="Give me a rain / backup plan for this event.">🌧️ Backup plan</button>
+      <button type="button" data-prompt="Where can I save money in this budget without hurting the guest experience?">💸 Save money</button>
+      <button type="button" data-prompt="Create a detailed run-of-show schedule for the event day itself.">🕒 Day-of schedule</button>
+      <button type="button" data-prompt="Suggest 5 unique, personalized touches based on everything you know about this event.">✨ Unique touches</button>
+    </div>
+    <div class="chat-log" id="chat-log" aria-live="polite"></div>
+    <form class="chat-form" id="chat-form">
+      <textarea id="chat-input" rows="1" placeholder="Ask about your plan…" aria-label="Message"></textarea>
+      <button class="btn btn-primary" type="submit" id="chat-send" aria-label="Send"><i class="fa-solid fa-paper-plane"></i></button>
+    </form>
+  </aside>
+  <div class="scrim" id="drawer-scrim" hidden></div>
+
+  <!-- ============ SETTINGS MODAL ============ -->
+  <dialog id="settings-modal" class="modal">
+    <form method="dialog" class="modal-body" id="settings-form">
+      <header class="modal-head">
+        <h3><i class="fa-solid fa-robot"></i> Generative AI settings</h3>
+        <button class="icon-btn" type="button" id="settings-close" aria-label="Close"><i class="fa-solid fa-xmark"></i></button>
+      </header>
+      <p class="muted">PlanWise calls the model directly from your browser. Your API key is stored only in this browser's local storage and never sent anywhere except the provider you choose.</p>
+      <div class="field">
+        <label for="s-provider">Provider</label>
+        <select id="s-provider">
+          <option value="gemini">Google Gemini (free tier available)</option>
+          <option value="openai">OpenAI</option>
+          <option value="groq">Groq (fast, free tier)</option>
+          <option value="openrouter">OpenRouter</option>
+          <option value="custom">Custom OpenAI-compatible endpoint</option>
+          <option value="local">Built-in Smart Planner (no AI key, template-based)</option>
+        </select>
+      </div>
+      <div class="field" id="s-key-field">
+        <label for="s-key">API key</label>
+        <div class="input-group">
+          <input id="s-key" type="password" autocomplete="off" placeholder="Paste your API key">
+          <button class="btn btn-ghost" type="button" id="s-key-toggle" aria-label="Show key"><i class="fa-regular fa-eye"></i></button>
+        </div>
+        <small id="s-key-help"></small>
+      </div>
+      <div class="grid2">
+        <div class="field" id="s-model-field">
+          <label for="s-model">Model</label>
+          <input id="s-model" type="text" list="model-list" placeholder="model id">
+          <datalist id="model-list"></datalist>
+        </div>
+        <div class="field" id="s-base-field" hidden>
+          <label for="s-base">Base URL</label>
+          <input id="s-base" type="url" placeholder="https://api.example.com/v1">
+        </div>
+      </div>
+      <div class="field">
+        <label class="check"><input type="checkbox" id="s-fallback" checked> If the AI call fails, fall back to the built-in Smart Planner (clearly labelled)</label>
+      </div>
+      <div class="test-row">
+        <button class="btn btn-ghost" type="button" id="s-test"><i class="fa-solid fa-plug-circle-check"></i> Test connection</button>
+        <span id="s-test-result" class="muted"></span>
+      </div>
+      <footer class="modal-foot">
+        <button class="btn btn-ghost" type="button" id="settings-cancel">Cancel</button>
+        <button class="btn btn-primary" type="submit" id="settings-save"><i class="fa-regular fa-floppy-disk"></i> Save settings</button>
+      </footer>
+    </form>
+  </dialog>
+
+  <!-- ============ REFINE MODAL ============ -->
+  <dialog id="refine-modal" class="modal">
+    <form method="dialog" class="modal-body" id="refine-form">
+      <header class="modal-head">
+        <h3><i class="fa-solid fa-wand-sparkles"></i> Refine plan with AI</h3>
+        <button class="icon-btn" type="button" id="refine-close" aria-label="Close"><i class="fa-solid fa-xmark"></i></button>
+      </header>
+      <p class="muted">Describe what to change. The AI will regenerate the full plan, keeping everything else consistent.</p>
+      <div class="quick-prompts">
+        <button type="button" data-fill="Make the whole plan more eco-friendly and sustainable.">🌱 Eco-friendly</button>
+        <button type="button" data-fill="Reduce the total budget by 20% while protecting food quality and photography.">✂️ Cut budget 20%</button>
+        <button type="button" data-fill="Make it more kid-friendly with activities and a safe layout.">🧒 Kid-friendly</button>
+        <button type="button" data-fill="Add a strong cultural / traditional element to ceremony, food and music.">🪔 More traditional</button>
+        <button type="button" data-fill="Make it a smaller, more intimate event with higher per-guest quality.">🕯️ More intimate</button>
+      </div>
+      <div class="field">
+        <label for="refine-text">Instruction</label>
+        <textarea id="refine-text" rows="3" placeholder="e.g. Move the ceremony outdoors, add a live band, and swap the sit-down dinner for food trucks." required></textarea>
+      </div>
+      <footer class="modal-foot">
+        <button class="btn btn-ghost" type="button" id="refine-cancel">Cancel</button>
+        <button class="btn btn-primary" type="submit"><i class="fa-solid fa-wand-sparkles"></i> Regenerate plan</button>
+      </footer>
+    </form>
+  </dialog>
+
+  <div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
+
+  <footer class="site-foot">
+    <p>PlanWise AI · A GenAI-powered planning assistant for weddings, birthdays &amp; community events. Budgets and estimates are AI-generated guidance — always confirm with your vendors.</p>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/marked@12.0.2/marked.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/dompurify@3.1.5/dist/purify.min.js"></script>
+  <script src="js/fallback.js"></script>
+  <script src="js/ai.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
